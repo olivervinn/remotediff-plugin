@@ -1,0 +1,29 @@
+<!--
+/*
+ * The MIT License
+ * Copyright 2016 Oliver Vinn.
+ * http://opensource.org/licenses/MIT
+ */
+  -->
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+    xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"
+	xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:u="/util"
+	>
+	<f:entry title="Command" field="cmd">
+        <f:textarea
+            class="codemirror"
+            style="height:5em"
+            codemirror-config="mode: 'text/x-sh'"
+            codemirror-mode="shell"/>
+    </f:entry>
+    <f:entry title="RegEx" name="regex" field="regex" >
+        <f:textbox />
+    </f:entry>
+    <f:entry title="Email Threshold"  field="emailThreshold">
+        <f:number/>
+    </f:entry>
+    <f:entry title="Abort Threshold" field="abortThreshold">
+        <f:number/>
+    </f:entry>
+</j:jelly>

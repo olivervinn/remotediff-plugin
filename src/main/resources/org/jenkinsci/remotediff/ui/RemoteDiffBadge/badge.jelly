@@ -1,0 +1,12 @@
+<!--
+/*
+ * The MIT License
+ * Copyright 2016 Oliver Vinn.
+ * http://opensource.org/licenses/MIT
+ */
+  -->
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<img width="16" height="16" title="${it.displayName}" alt="" src="${rootURL}${it.getIconFileName()}"/>
+    <small>${it.getCount();}</small>
+</j:jelly>

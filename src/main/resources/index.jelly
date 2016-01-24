@@ -1,0 +1,10 @@
+<!--
+/*
+ * The MIT License
+ * Copyright 2016 Oliver Vinn.
+ * http://opensource.org/licenses/MIT
+ */
+  -->
+<div>
+  This plugin provides remote change count and reports difference with optional email notification.
+</div>

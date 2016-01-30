@@ -8,12 +8,10 @@ package org.jenkinsci.remotediff.core;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.Action;
-import hudson.model.BuildListener;
+import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+import hudson.tasks.Shell;
 import hudson.util.FormValidation;
 import org.jenkinsci.remotediff.ui.RemoteDiffBadge;
 import org.jenkinsci.remotediff.ui.RemoteDiffReport;
@@ -22,14 +20,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.annotation.Nonnull;
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,32 +56,25 @@ public class RemoteDiffBuildStep extends Builder {
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
 
-        // API recommends throwing error rather than catching
-        Runtime rt = Runtime.getRuntime();
-        Process pr = rt.exec(this.cmd);
-        int number_of_changes = pr.waitFor();
+        ByteArrayOutputStream outputparser = new ByteArrayOutputStream();
+        StreamBuildListener tasklistener = new StreamBuildListener(outputparser);
 
-        // Get process output
-        InputStream stdin = pr.getInputStream();
-        InputStreamReader isr = new InputStreamReader(stdin);
-        BufferedReader br = new BufferedReader(isr);
+        Shell sh = new Shell(this.cmd);
+        boolean ok = sh.perform(build, launcher, tasklistener);
 
-        // Match
+        String[] log = outputparser.toString().split("\n");
+        int number_of_changes = 0;
         Pattern p = Pattern.compile(this.regex);
-        List<String> log = new ArrayList<String>();
-
-        String line;
-        while ((line = br.readLine()) != null) {
-            Matcher matcher = p.matcher(line);
+        for (String l : log) {
+            Matcher matcher = p.matcher(l);
             if (matcher.matches()) {
                 number_of_changes = Integer.parseInt(matcher.group(1));
+                break;
             }
-            log.add(line);
         }
 
-        // Record
         RemoteDiffAction.RemoteDiffInfo info = new RemoteDiffAction.RemoteDiffInfo(
-                log.toArray(new String[log.size()]),
+                log,
                 number_of_changes,
                 number_of_changes >= emailThreshold,
                 number_of_changes >= abortThreshold);

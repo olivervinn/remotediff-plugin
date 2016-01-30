@@ -9,6 +9,7 @@ package org.jenkinsci.remotediff.core;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class RemoteDiffAction implements Action {
 
-    AbstractBuild<?, ?> build;
     public List<RemoteDiffInfo> buildInfo;
+    AbstractBuild<?, ?> build;
 
     public RemoteDiffAction(AbstractBuild<?, ?> build) {
         buildInfo = new ArrayList<RemoteDiffInfo>();
@@ -65,18 +66,19 @@ public class RemoteDiffAction implements Action {
     }
 
     public String[] getLog() {
-        for (RemoteDiffInfo info : buildInfo) {
-            return info.log;
+        if (buildInfo.isEmpty()) {
+            return null;
+        } else {
+            return buildInfo.get(0).log;
         }
-        return null;
     }
 
     /**
      * Data class to store data from slaves.
      */
-    public static class RemoteDiffInfo {
-        private int changes_behind_remote;
+    public static class RemoteDiffInfo implements Serializable {
         public String[] log;
+        private int changes_behind_remote;
         private boolean trigger_email;
         private boolean trigger_abort;
 

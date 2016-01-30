@@ -5,6 +5,7 @@
  * http://opensource.org/licenses/MIT
  */
   -->
+<?jelly escape-by-default='true'?>
 <div>
   This plugin provides remote change count and reports difference with optional email notification.
 </div>

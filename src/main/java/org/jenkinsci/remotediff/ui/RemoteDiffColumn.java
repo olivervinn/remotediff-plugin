@@ -33,7 +33,7 @@ public class RemoteDiffColumn extends ListViewColumn {
         if (action != null) {
             return String.format("%s", action.getChangesBehindRemoteHead());
         }
-        return "N/A";
+        return "--";
     }
 
     @Extension
@@ -45,7 +45,7 @@ public class RemoteDiffColumn extends ListViewColumn {
         @Nonnull
         @Override
         public String getDisplayName() {
-            return "SCM Remote Diff";
+            return "Remote Diff";
         }
 
         public boolean shownByDefault() {

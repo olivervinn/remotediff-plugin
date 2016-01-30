@@ -9,6 +9,7 @@ package org.jenkinsci.remotediff.core;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.*;
+import hudson.tasks.BatchFile;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.tasks.Shell;
@@ -59,10 +60,17 @@ public class RemoteDiffBuildStep extends Builder {
         ByteArrayOutputStream outputparser = new ByteArrayOutputStream();
         StreamBuildListener tasklistener = new StreamBuildListener(outputparser);
 
-        Shell sh = new Shell(this.cmd);
-        boolean ok = sh.perform(build, launcher, tasklistener);
+        String[] log;
+        if (launcher.isUnix()) {
+            Shell sh = new Shell(this.cmd);
+            boolean ok = sh.perform(build, launcher, tasklistener);
+            log = outputparser.toString().split("\n");
+        } else {
+            BatchFile bat = new BatchFile(this.cmd);
+            boolean ok = bat.perform(build, launcher, tasklistener);
+            log = outputparser.toString().split("\r\n");
+        }
 
-        String[] log = outputparser.toString().split("\n");
         int number_of_changes = 0;
         Pattern p = Pattern.compile(this.regex);
         for (String l : log) {

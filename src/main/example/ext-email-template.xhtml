@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<!--
+/*
+ * The MIT License
+ * Copyright 2016 Oliver Vinn.
+ * http://opensource.org/licenses/MIT
+ */
+  -->
+<head>
+    <style>
+        BODY, TABLE, TD, TH, P {
+        font-family:Verdana,Helvetica,sans serif;
+        font-size:11px;
+        color:black;
+        }
+        h1 { color:black; }
+        h2 { color:black; }
+        h3 { color:black; }
+        TD.bg1 { color:white; background-color:#0000C0; font-size:120% }
+        TD.bg2 { color:white; background-color:#4040FF; font-size:110% }
+        TD.bg3 { color:white; background-color:#8080FF; }
+        TD.test_passed { color:blue; }
+        TD.test_failed { color:red; }
+        TD.console { font-family:Courier New; }
+    </style>
+</head>
+<body>
+
+<
+%
+def artifacts = it.getAction("org.jenkinsci.remotediff.core.RemoteDiffAction")
+if(artifacts != null > 0) {
+def log = artifacts.getLog()
+%>
+
+<table>
+    <tr>
+        <td align="right"></td>
+        <td valign="center"><b style="font-size: 200%;">REMOTE BEHIND BY ${artifacts.getChangesBehindRemoteHead()}
+            (BUILD ${build.result})</b><br/><br/></td>
+    </tr>
+    <tr>
+        <td>URL</td>
+        <td><a href="${rooturl}${build.url}">${rooturl}${build.url}</a></td>
+    </tr>
+    <tr>
+        <td>Project:</td>
+        <td>$ { project.name }</td>
+    </tr>
+    <tr>
+        <td>Date:<br/><br/></td>
+        <td>$ { it.timestampString }</td>
+    </tr>
+    <tr>
+        <td>Behind Count:<br/><br/></td>
+        <td>$ { artifacts.getChangesBehindRemoteHead() }</td>
+    </tr>
+    <tr>
+        <td>Report:</td>
+        <td>
+            <
+            %
+            log.each { s -> if (s?.trim()) println "
+            <pre>" + s + "</pre>
+            " }
+            %>
+        </td>
+    </tr>
+</table>
+<
+% } %>
+
+</body>
+</html>
+

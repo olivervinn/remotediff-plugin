@@ -3,10 +3,10 @@ Jenkins plugin to check remote stream for number of changes it is ahead by compa
 
 #### Badge
 
-![Badge](https://raw.githubusercontent.com/ovinn/remotediff-plugin/master/img/badge.png)
+![Badge](https://raw.githubusercontent.com/olivervinn/remotediff-plugin/master/img/badge.png)
 
 #### Build Step
-![Build Step](https://raw.githubusercontent.com/ovinn/remotediff-plugin/master/img/buildstep.png)
+![Build Step](https://raw.githubusercontent.com/olivervinn/remotediff-plugin/master/img/buildstep.png)
 
 #### Email Trigger
-![Email Trigger](https://raw.githubusercontent.com/ovinn/remotediff-plugin/master/img/emailtrigger.png)
+![Email Trigger](https://raw.githubusercontent.com/olivervinn/remotediff-plugin/master/img/emailtrigger.png)
